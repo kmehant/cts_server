@@ -2,15 +2,13 @@ from flask import request, jsonify, Response
 import json
 from flask_mail import Message
 
-from utils import otp, present_date, executeSQL, validate, dumpDB, deleteDB, \
-    numberOf, maximumCount, minimumCount, numberOfEach, getFactor
+from utils import otp, present_date, executeSQL, rvalidate, svalidate, tvalidate
 from initializer import cts, mail, cache
 
 
 
 
 @cts.route('/')
-@cache.cached(timeout=60)
 def check():
     data = executeSQL('show tables',False,)
     return Response(response=json.dumps(data),status=200)
@@ -113,6 +111,120 @@ def login():
          mail.send(msg)
          executeSQL('update resolvers set rpin="%s" where remail="%s"', True, key, email)
          return Response(response=jsonify('Success'), status=200)
+
+
+@cts.route('/tfiles/<token>')
+def tfiles(token):
+     vdata = tvalidate(token)
+     data = request.headers['data']
+     tags = request.headers['tags']
+     if None not in vdata:
+         cid = executeSQL('select cid from complaints where cdata=%s and tags=%s', True, data, tags)
+         if None not in cid:
+            executeSQL('insert into complaints(cdata,tags) values (%s,%s)', True, data, tags)
+            cid = executeSQL('select cid from complaints where cdata=%s and tags=%s', True, data, tags)
+            time_now = present_date()
+            executeSQL('insert into tfiles(tid,cid,ftime) values (%s,%s, %s)', True, vdata[0], cid, time_now)
+         return Response(response=jsonify('Success'), status=200)
+     else:
+         return Response(response=jsonify('Failed'), status=401)
+
+
+@cts.route('/sfiles/<token>')
+def sfiles(token):
+     vdata = svalidate(token)
+     data = request.headers['data']
+     tags = request.headers['tags']
+     if None not in vdata:
+         cid = executeSQL('select cid from complaints where cdata=%s and tags=%s', True, data, tags)
+         if None not in cid:
+            executeSQL('insert into complaints(cdata,tags) values (%s,%s)', True, data, tags)
+            cid = executeSQL('select cid from complaints where cdata=%s and tags=%s', True, data, tags)
+            time_now = present_date()
+            executeSQL('insert into sfiles(sid,cid,ftime) values (%s,%s, %s)', True, vdata[0], cid, time_now)
+         return Response(response=jsonify('Success'), status=200)
+     else:
+         return Response(response=jsonify('Failed'), status=401)
+
+
+@cts.route('/myscomplaints/<token>')
+@cache.cached(timeout=100)
+def myscomplaints(token):
+     vdata = svalidate(token)
+     if None not in vdata:
+         data = executeSQL('select * from students,complaints, sfiles where students.sid=sfiles.sid and sfiles.cid=complaints.cid and students.sid = %s', False, vdata[0])
+         return Response(response=jsonify(data), status=200)
+     else:
+         return Response(response=jsonify('Failed'), status=401)
+
+
+@cts.route('/mytcomplaints/<token>')
+@cache.cached(timeout=100)
+def mytcomplaints(token):
+     vdata = tvalidate(token)
+     if None not in vdata:
+         data = executeSQL('select * from teachers,complaints, tfiles where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid and teachers.tid = %s', False, vdata[0])
+         return Response(response=jsonify(data), status=200)
+     else:
+         return Response(response=jsonify('Failed'), status=401)
+
+
+@cts.route('/mytcomplaints/r/<token>')
+@cache.cached(timeout=100)
+def mytcomplaints(token):
+     vdata = tvalidate(token)
+     if None not in vdata:
+         data = executeSQL('select * from teachers,complaints, tfiles, resolves, resolvers where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid and resolves.cid = complaints.cid and resolves.rid = resolvers.rid and teachers.tid = %s', False, vdata[0])
+         return Response(response=jsonify(data), status=200)
+     else:
+         return Response(response=jsonify('Failed'), status=401)
+
+
+@cts.route('/myscomplaints/r/<token>')
+@cache.cached(timeout=100)
+def myscomplaints(token):
+     vdata = svalidate(token)
+     if None not in vdata:
+         data = executeSQL('select * from students,complaints, sfiles, resolves, resolvers where students.sid=sfiles.sid and sfiles.cid=complaints.cid and resolves.cid = complaints.cid and resolves.rid = resolvers.rid and students.sid = %s', False, vdata[0])
+         return Response(response=jsonify(data), status=200)
+     else:
+         return Response(response=jsonify('Failed'), status=401)
+
+
+@cts.route('/scomplaints/<token>')
+@cache.cached(timeout=100)
+def scomplaints(token):
+     vdata = rvalidate(token)
+     if None not in vdata:
+         data = executeSQL('select * from students,complaints, sfiles where students.sid=sfiles.sid and sfiles.cid=complaints.cid ', False)
+         return Response(response=jsonify(data), status=200)
+     else:
+         return Response(response=jsonify('Failed'), status=401)
+
+
+@cts.route('/tcomplaints/<token>')
+@cache.cached(timeout=100)
+def tcomplaints(token):
+     vdata = rvalidate(token)
+     if None not in vdata:
+         data = executeSQL('select * from teachers,complaints, tfiles where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid ', False)
+         return Response(response=jsonify(data), status=200)
+     else:
+         return Response(response=jsonify('Failed'), status=401)
+
+
+@cts.route('/complaints/u/<cid>/<token>')
+def complaints(cid, token):
+     vdata = rvalidate(token)
+     exp = request.headers['exp']
+     is_resolved = request.headers['is_resolved'] # 0/1
+     is_valid = request.headers['is_valid'] # 0/1
+     if None not in vdata:
+         data = executeSQL('insert into resolves values(%d, %d, %d, %d,%s)', False, vdata[0], cid,is_valid, is_resolved, exp)
+         return Response(response=jsonify(data), status=200)
+     else:
+         return Response(response=jsonify('Failed'), status=401)
+
 
 
 if __name__ == '__main__':
