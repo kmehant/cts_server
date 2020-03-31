@@ -28,11 +28,11 @@ def tlogin():
      if domain != "@nitandhra.ac.in":
         return Response(response='Failed', status=401)
      sd = executeSQL('select tid from teachers where temail=%s', True, email)
-     if sd == "":
+     if sd == "Failure":
         executeSQL('insert into teachers (temail) values(%s)', True, email)
-     if onepass != "":
+     if onepass is not None:
          p = executeSQL('select tid from teachers where temail=%s and tpin=%s', True, email, onepass)
-         if None not in p:
+         if p != "Failure":
              return Response(response='Success', status=200)
          return Response(response='Failed', status=401)
      else:
@@ -51,23 +51,19 @@ def tlogin():
 def slogin():
      email = request.args.get('email')
      onepass = request.args.get('pin')
-     print("email: " + email)
-     print("onepass" + onepass)
      try: 
         pos = email.index('@') 
      except ValueError as e: 
         return Response(response='Invalid', status=401)
         pass
      domain = email[pos:]
-     print(domain)
      if domain != "@student.nitandhra.ac.in":
         return Response(response='Failed', status=401)
      sd = executeSQL('select sid from students where Semail=%s', True, email)
      if sd == "Failure":
         executeSQL('insert into students (Semail) values(%s)', True, email)
-     if onepass != "":
+     if onepass is not None:
          p = executeSQL('select sid from students where Semail=%s and spin=%s', True, email, onepass)
-         print(p)
          if p != "Failure":
              return Response(response='Success', status=200)
          return Response(response='Failed', status=401)
@@ -130,9 +126,9 @@ def signup():
 def rlogin():
      email = request.args.get('email')
      onepass = request.args.get('pin')
-     if onepass != "":
+     if onepass is not None:
          p = executeSQL('select rid from resolvers where remail=%s and rpin=%s', True, email, onepass)
-         if None not in p:
+         if p != "Failure":
              return Response(response='Success', status=200)
          return Response(response='Failed', status=401)
      else:
