@@ -28,7 +28,7 @@ def tlogin():
      if domain != "@nitandhra.ac.in":
         return Response(response='Failed', status=401)
      sd = executeSQL('select tid from teachers where temail=%s', True, email)
-     if None in sd:
+     if sd == "":
         executeSQL('insert into teachers (temail) values(%s)', True, email)
      if onepass != "":
          p = executeSQL('select tid from teachers where temail=%s and tpin=%s', True, email, onepass)
@@ -61,7 +61,8 @@ def slogin():
      if domain != "@student.nitandhra.ac.in":
         return Response(response='Failed', status=401)
      sd = executeSQL('select sid from students where Semail=%s', True, email)
-     if None in sd:
+     print(sd)
+     if sd == "":
         executeSQL('insert into students (Semail) values(%s)', True, email)
      if onepass != "":
          p = executeSQL('select sid from students where Semail=%s and spin=%s', True, email, onepass)
