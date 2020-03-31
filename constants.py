@@ -1,7 +1,7 @@
 import os
 
 
-mail_pass = "Tadepalligudem^2000"
+
 db_pass = "NvsA3cShRu"
 
 mail_settings = {
@@ -9,8 +9,8 @@ mail_settings = {
     "MAIL_PORT": 465,
     "MAIL_USE_TLS": False,
     "MAIL_USE_SSL": True,
-    "MAIL_USERNAME": "411843@student.nitandhra.ac.in",
-    "MAIL_PASSWORD": mail_pass
+    "MAIL_USERNAME": "paspmailservice@gmail.com",
+    "MAIL_PASSWORD": "pasp_service@darkshadows"
 }
 
 # production hosting values are given below
