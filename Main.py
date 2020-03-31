@@ -24,10 +24,10 @@ def login():
         return Response(response=jsonify('Invalid'), status=401)
         pass
      domain = email[pos:]
-     if (domain != "student.nitandhra.ac.in" or domain != "nitandhra.ac.in")
+     if domain != "student.nitandhra.ac.in" or domain != "nitandhra.ac.in":
         return Response(response=jsonify('Failed'), status=401)
      if onepass != "":
-         if (domain == "student.nitandhra.ac.in")
+         if domain == "student.nitandhra.ac.in":
              p = executeSQL('select sid from students where Semail=%s and spin=%s', True, email, onepass)
          else:
              p = executeSQL('select tid from teachers where temail=%s and tpin=%s', True, email, onepass)
@@ -42,7 +42,7 @@ def login():
              recipients=[email],
              body='Single use pin: %s \n \n \n This is an auto generated mail. \n Please do not reply to this message or on this email address. \n For any query, please contact at 411843@student.nitandhra.ac.in \n Do not disclose any confidential information to anyone.' % key)
          mail.send(msg)
-         if (domain == "student.nitandhra.ac.in")
+         if domain == "student.nitandhra.ac.in":
              executeSQL('update students set spin="%s" where Semail="%s"', True, key, email)
          else:
              executeSQL('update teachers set tpin="%s" where temail="%s"', True, key, email)
@@ -93,7 +93,7 @@ def signup():
 
 
 @cts.route('/rlogin')
-def login():
+def rlogin():
      email = request.args.get('email')
      onepass = request.args.get('pin')
      if onepass != "":
@@ -171,7 +171,7 @@ def mytcomplaints(token):
 
 @cts.route('/mytcomplaints/r/<token>')
 @cache.cached(timeout=100)
-def mytcomplaints(token):
+def mytcomplaintsr(token):
      vdata = tvalidate(token)
      if None not in vdata:
          data = executeSQL('select * from teachers,complaints, tfiles, resolves, resolvers where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid and resolves.cid = complaints.cid and resolves.rid = resolvers.rid and teachers.tid = %s', False, vdata[0])
@@ -182,7 +182,7 @@ def mytcomplaints(token):
 
 @cts.route('/myscomplaints/r/<token>')
 @cache.cached(timeout=100)
-def myscomplaints(token):
+def myscomplaintsr(token):
      vdata = svalidate(token)
      if None not in vdata:
          data = executeSQL('select * from students,complaints, sfiles, resolves, resolvers where students.sid=sfiles.sid and sfiles.cid=complaints.cid and resolves.cid = complaints.cid and resolves.rid = resolvers.rid and students.sid = %s', False, vdata[0])
@@ -224,7 +224,6 @@ def complaints(cid, token):
          return Response(response=jsonify(data), status=200)
      else:
          return Response(response=jsonify('Failed'), status=401)
-
 
 
 if __name__ == '__main__':
