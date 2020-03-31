@@ -21,17 +21,20 @@ def tlogin():
      try: 
         pos = email.index('@') 
      except ValueError as e: 
-        return Response(response=jsonify('Invalid'), status=401)
+        return Response(response='Invalid', status=401)
         pass
      domain = email[pos:]
      print(domain)
      if domain != "nitandhra.ac.in":
-        return Response(response=jsonify('Failed'), status=401)
+        return Response(response='Failed', status=401)
+     sd = executeSQL('select tid from teachers where temail=%s', True, email)
+     if None in sd:
+        executeSQL('insert into teachers (temail) values(%s)', True, email)
      if onepass != "":
          p = executeSQL('select tid from teachers where temail=%s and tpin=%s', True, email, onepass)
          if None not in p:
-             return Response(response=jsonify('Success'), status=200)
-         return Response(response=jsonify('Failed'), status=401)
+             return Response(response='Success', status=200)
+         return Response(response='Failed', status=401)
      else:
          key = otp()
          with cts.app_context():
@@ -41,7 +44,7 @@ def tlogin():
              body='Single use pin: %s \n \n \n This is an auto generated mail. \n Please do not reply to this message or on this email address. \n For any query, please contact at 411843@student.nitandhra.ac.in \n Do not disclose any confidential information to anyone.' % key)
          mail.send(msg)
          executeSQL('update teachers set tpin="%s" where temail="%s"', True, key, email)
-         return Response(response=jsonify('Success'), status=200)
+         return Response(response='Success', status=200)
 
 
 @cts.route('/login/s')
@@ -51,17 +54,20 @@ def slogin():
      try: 
         pos = email.index('@') 
      except ValueError as e: 
-        return Response(response=jsonify('Invalid'), status=401)
+        return Response(response='Invalid', status=401)
         pass
      domain = email[pos:]
      print(domain)
      if domain != "student.nitandhra.ac.in":
-        return Response(response=jsonify('Failed'), status=401)
+        return Response(response='Failed', status=401)
+     sd = executeSQL('select sid from students where Semail=%s', True, email)
+     if None in sd:
+        executeSQL('insert into students (Semail) values(%s)', True, email)
      if onepass != "":
          p = executeSQL('select sid from students where Semail=%s and spin=%s', True, email, onepass)
          if None not in p:
-             return Response(response=jsonify('Success'), status=200)
-         return Response(response=jsonify('Failed'), status=401)
+             return Response(response='Success', status=200)
+         return Response(response='Failed', status=401)
      else:
          key = otp()
          with cts.app_context():
@@ -71,7 +77,7 @@ def slogin():
              body='Single use pin: %s \n \n \n This is an auto generated mail. \n Please do not reply to this message or on this email address. \n For any query, please contact at 411843@student.nitandhra.ac.in \n Do not disclose any confidential information to anyone.' % key)
          mail.send(msg)
          executeSQL('update students set spin="%s" where Semail="%s"', True, key, email)
-         return Response(response=jsonify('Success'), status=200)
+         return Response(response='Success', status=200)
      
 
 @cts.route('/signup')
@@ -81,11 +87,11 @@ def signup():
      try: 
         pos = email.index('@') 
      except ValueError as e: 
-        return Response(response=jsonify('Invalid'), status=401)
+        return Response(response='Invalid', status=401)
         pass
      domain = email[pos:]
      if domain != "student.nitandhra.ac.in" or domain != "nitandhra.ac.in":
-        return Response(response=jsonify('Failed'), status=401)
+        return Response(response='Failed', status=401)
      if domain == "student.nitandhra.ac.in":
         i = executeSQL('select sid from students where Semail=%s', True, email)
      else:
@@ -100,8 +106,8 @@ def signup():
          else:
              p = executeSQL('select tpin from teachers where temail=%s', True, email)
          if p[0] == onepass:
-             return Response(response=jsonify('Success'), status=200)
-         return Response(response=jsonify('Failed'), status=401)
+             return Response(response='Success', status=200)
+         return Response(response='Failed', status=401)
      else:
          key = otp()
          with cts.app_context():
@@ -114,7 +120,7 @@ def signup():
              executeSQL('update students set spin="%s" where Semail="%s"', True, key, email)
          else:
              executeSQL('update teachers set tpin="%s" where temail="%s"', True, key, email)
-         return Response(response=jsonify('Success'), status=200)
+         return Response(response='Success', status=200)
 
 
 @cts.route('/login/r')
@@ -124,8 +130,8 @@ def rlogin():
      if onepass != "":
          p = executeSQL('select rid from resolvers where remail=%s and rpin=%s', True, email, onepass)
          if None not in p:
-             return Response(response=jsonify('Success'), status=200)
-         return Response(response=jsonify('Failed'), status=401)
+             return Response(response='Success', status=200)
+         return Response(response='Failed', status=401)
      else:
          key = otp()
          with cts.app_context():
@@ -135,7 +141,7 @@ def rlogin():
              body='Single use pin: %s \n \n \n This is an auto generated mail. \n Please do not reply to this message or on this email address. \n For any query, please contact at 411843@student.nitandhra.ac.in \n Do not disclose any confidential information to anyone.' % key)
          mail.send(msg)
          executeSQL('update resolvers set rpin="%s" where remail="%s"', True, key, email)
-         return Response(response=jsonify('Success'), status=200)
+         return Response(response='Success', status=200)
 
 
 @cts.route('/tfiles/<token>')
@@ -150,9 +156,9 @@ def tfiles(token):
             cid = executeSQL('select cid from complaints where cdata=%s and tags=%s', True, data, tags)
             time_now = present_date()
             executeSQL('insert into tfiles(tid,cid,ftime) values (%s,%s, %s)', True, vdata[0], cid, time_now)
-         return Response(response=jsonify('Success'), status=200)
+         return Response(response='Success', status=200)
      else:
-         return Response(response=jsonify('Failed'), status=401)
+         return Response(response='Failed', status=401)
 
 
 @cts.route('/sfiles/<token>')
@@ -167,9 +173,9 @@ def sfiles(token):
             cid = executeSQL('select cid from complaints where cdata=%s and tags=%s', True, data, tags)
             time_now = present_date()
             executeSQL('insert into sfiles(sid,cid,ftime) values (%s,%s, %s)', True, vdata[0], cid, time_now)
-         return Response(response=jsonify('Success'), status=200)
+         return Response(response='Success', status=200)
      else:
-         return Response(response=jsonify('Failed'), status=401)
+         return Response(response='Failed', status=401)
 
 
 @cts.route('/myscomplaints/<token>')
@@ -178,9 +184,9 @@ def myscomplaints(token):
      vdata = svalidate(token)
      if None not in vdata:
          data = executeSQL('select * from students,complaints, sfiles where students.sid=sfiles.sid and sfiles.cid=complaints.cid and students.sid = %s', False, vdata[0])
-         return Response(response=jsonify(data), status=200)
+         return Response(response=data, status=200)
      else:
-         return Response(response=jsonify('Failed'), status=401)
+         return Response(response='Failed', status=401)
 
 
 @cts.route('/mytcomplaints/<token>')
@@ -189,9 +195,9 @@ def mytcomplaints(token):
      vdata = tvalidate(token)
      if None not in vdata:
          data = executeSQL('select * from teachers,complaints, tfiles where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid and teachers.tid = %s', False, vdata[0])
-         return Response(response=jsonify(data), status=200)
+         return Response(response=data, status=200)
      else:
-         return Response(response=jsonify('Failed'), status=401)
+         return Response(response='Failed', status=401)
 
 
 @cts.route('/mytcomplaints/r/<token>')
@@ -200,9 +206,9 @@ def mytcomplaintsr(token):
      vdata = tvalidate(token)
      if None not in vdata:
          data = executeSQL('select * from teachers,complaints, tfiles, resolves, resolvers where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid and resolves.cid = complaints.cid and resolves.rid = resolvers.rid and teachers.tid = %s', False, vdata[0])
-         return Response(response=jsonify(data), status=200)
+         return Response(response=data, status=200)
      else:
-         return Response(response=jsonify('Failed'), status=401)
+         return Response(response='Failed', status=401)
 
 
 @cts.route('/myscomplaints/r/<token>')
@@ -211,9 +217,9 @@ def myscomplaintsr(token):
      vdata = svalidate(token)
      if None not in vdata:
          data = executeSQL('select * from students,complaints, sfiles, resolves, resolvers where students.sid=sfiles.sid and sfiles.cid=complaints.cid and resolves.cid = complaints.cid and resolves.rid = resolvers.rid and students.sid = %s', False, vdata[0])
-         return Response(response=jsonify(data), status=200)
+         return Response(response=data, status=200)
      else:
-         return Response(response=jsonify('Failed'), status=401)
+         return Response(response='Failed', status=401)
 
 
 @cts.route('/scomplaints/<token>')
@@ -222,9 +228,9 @@ def scomplaints(token):
      vdata = rvalidate(token)
      if None not in vdata:
          data = executeSQL('select * from students,complaints, sfiles where students.sid=sfiles.sid and sfiles.cid=complaints.cid ', False)
-         return Response(response=jsonify(data), status=200)
+         return Response(response=data, status=200)
      else:
-         return Response(response=jsonify('Failed'), status=401)
+         return Response(response='Failed', status=401)
 
 
 @cts.route('/tcomplaints/<token>')
@@ -233,9 +239,9 @@ def tcomplaints(token):
      vdata = rvalidate(token)
      if None not in vdata:
          data = executeSQL('select * from teachers,complaints, tfiles where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid ', False)
-         return Response(response=jsonify(data), status=200)
+         return Response(response=data, status=200)
      else:
-         return Response(response=jsonify('Failed'), status=401)
+         return Response(response='Failed', status=401)
 
 
 @cts.route('/complaints/u/<cid>/<token>')
@@ -246,9 +252,9 @@ def complaints(cid, token):
      is_valid = request.headers['is_valid'] # 0/1
      if None not in vdata:
          data = executeSQL('insert into resolves values(%d, %d, %d, %d,%s)', False, vdata[0], cid,is_valid, is_resolved, exp)
-         return Response(response=jsonify(data), status=200)
+         return Response(response=data, status=200)
      else:
-         return Response(response=jsonify('Failed'), status=401)
+         return Response(response='Failed', status=401)
 
 
 if __name__ == '__main__':

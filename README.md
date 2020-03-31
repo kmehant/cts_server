@@ -1,3 +1,4 @@
 # CTS server
 
-pass NvsA3cShRu
+dbpass NvsA3cShRu
+https://cts-server.herokuapp.com/
