@@ -34,10 +34,7 @@ CREATE TABLE `complaints` (
 -- Dumping data for table `complaints`
 --
 
-LOCK TABLES `complaints` WRITE;
-/*!40000 ALTER TABLE `complaints` DISABLE KEYS */;
-/*!40000 ALTER TABLE `complaints` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
 -- Table structure for table `resolvers`
@@ -58,12 +55,7 @@ CREATE TABLE `resolvers` (
 
 --
 -- Dumping data for table `resolvers`
---
 
-LOCK TABLES `resolvers` WRITE;
-/*!40000 ALTER TABLE `resolvers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `resolvers` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `resolves`
@@ -89,10 +81,7 @@ CREATE TABLE `resolves` (
 -- Dumping data for table `resolves`
 --
 
-LOCK TABLES `resolves` WRITE;
-/*!40000 ALTER TABLE `resolves` DISABLE KEYS */;
-/*!40000 ALTER TABLE `resolves` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
 -- Table structure for table `sfiles`
@@ -116,10 +105,7 @@ CREATE TABLE `sfiles` (
 -- Dumping data for table `sfiles`
 --
 
-LOCK TABLES `sfiles` WRITE;
-/*!40000 ALTER TABLE `sfiles` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sfiles` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
 -- Table structure for table `students`
@@ -141,10 +127,7 @@ CREATE TABLE `students` (
 -- Dumping data for table `students`
 --
 
-LOCK TABLES `students` WRITE;
-/*!40000 ALTER TABLE `students` DISABLE KEYS */;
-/*!40000 ALTER TABLE `students` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
 -- Table structure for table `teachers`
@@ -166,10 +149,7 @@ CREATE TABLE `teachers` (
 -- Dumping data for table `teachers`
 --
 
-LOCK TABLES `teachers` WRITE;
-/*!40000 ALTER TABLE `teachers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `teachers` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
 -- Table structure for table `tfiles`
@@ -193,10 +173,7 @@ CREATE TABLE `tfiles` (
 -- Dumping data for table `tfiles`
 --
 
-LOCK TABLES `tfiles` WRITE;
-/*!40000 ALTER TABLE `tfiles` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tfiles` ENABLE KEYS */;
-UNLOCK TABLES;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

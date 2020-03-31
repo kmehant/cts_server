@@ -14,8 +14,8 @@ def check():
     return Response(response=json.dumps(data),status=200)
 
 
-@cts.route('/login')
-def login():
+@cts.route('/login/t')
+def tlogin():
      email = request.args.get('email')
      onepass = request.args.get('pin')
      try: 
@@ -24,13 +24,11 @@ def login():
         return Response(response=jsonify('Invalid'), status=401)
         pass
      domain = email[pos:]
-     if domain != "student.nitandhra.ac.in" or domain != "nitandhra.ac.in":
+     print(domain)
+     if domain != "nitandhra.ac.in":
         return Response(response=jsonify('Failed'), status=401)
      if onepass != "":
-         if domain == "student.nitandhra.ac.in":
-             p = executeSQL('select sid from students where Semail=%s and spin=%s', True, email, onepass)
-         else:
-             p = executeSQL('select tid from teachers where temail=%s and tpin=%s', True, email, onepass)
+         p = executeSQL('select tid from teachers where temail=%s and tpin=%s', True, email, onepass)
          if None not in p:
              return Response(response=jsonify('Success'), status=200)
          return Response(response=jsonify('Failed'), status=401)
@@ -42,10 +40,37 @@ def login():
              recipients=[email],
              body='Single use pin: %s \n \n \n This is an auto generated mail. \n Please do not reply to this message or on this email address. \n For any query, please contact at 411843@student.nitandhra.ac.in \n Do not disclose any confidential information to anyone.' % key)
          mail.send(msg)
-         if domain == "student.nitandhra.ac.in":
-             executeSQL('update students set spin="%s" where Semail="%s"', True, key, email)
-         else:
-             executeSQL('update teachers set tpin="%s" where temail="%s"', True, key, email)
+         executeSQL('update teachers set tpin="%s" where temail="%s"', True, key, email)
+         return Response(response=jsonify('Success'), status=200)
+
+
+@cts.route('/login/s')
+def slogin():
+     email = request.args.get('email')
+     onepass = request.args.get('pin')
+     try: 
+        pos = email.index('@') 
+     except ValueError as e: 
+        return Response(response=jsonify('Invalid'), status=401)
+        pass
+     domain = email[pos:]
+     print(domain)
+     if domain != "student.nitandhra.ac.in":
+        return Response(response=jsonify('Failed'), status=401)
+     if onepass != "":
+         p = executeSQL('select sid from students where Semail=%s and spin=%s', True, email, onepass)
+         if None not in p:
+             return Response(response=jsonify('Success'), status=200)
+         return Response(response=jsonify('Failed'), status=401)
+     else:
+         key = otp()
+         with cts.app_context():
+             msg = Message(subject="Single use pin for NIT Andhra Pradesh CTS login",
+             sender=cts.config.get("MAIL_USERNAME"),
+             recipients=[email],
+             body='Single use pin: %s \n \n \n This is an auto generated mail. \n Please do not reply to this message or on this email address. \n For any query, please contact at 411843@student.nitandhra.ac.in \n Do not disclose any confidential information to anyone.' % key)
+         mail.send(msg)
+         executeSQL('update students set spin="%s" where Semail="%s"', True, key, email)
          return Response(response=jsonify('Success'), status=200)
      
 
@@ -92,7 +117,7 @@ def signup():
          return Response(response=jsonify('Success'), status=200)
 
 
-@cts.route('/rlogin')
+@cts.route('/login/r')
 def rlogin():
      email = request.args.get('email')
      onepass = request.args.get('pin')
