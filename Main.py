@@ -61,12 +61,12 @@ def slogin():
      if domain != "@student.nitandhra.ac.in":
         return Response(response='Failed', status=401)
      sd = executeSQL('select sid from students where Semail=%s', True, email)
-     print(sd)
-     if sd == "":
+     if sd == "Failure":
         executeSQL('insert into students (Semail) values(%s)', True, email)
      if onepass != "":
          p = executeSQL('select sid from students where Semail=%s and spin=%s', True, email, onepass)
-         if None not in p:
+         print(p)
+         if p != "Failure":
              return Response(response='Success', status=200)
          return Response(response='Failed', status=401)
      else:
