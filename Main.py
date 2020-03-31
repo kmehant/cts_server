@@ -27,11 +27,11 @@ def tlogin():
      print(domain)
      if domain != "@nitandhra.ac.in":
         return Response(response='Failed', status=401)
-     sd = executeSQL('select tid from teachers where temail=%s', True, email)
+     sd = executeSQL('select tid from teachers where temail="%s"', True, email)
      if sd == "Failure":
-        executeSQL('insert into teachers (temail) values(%s)', True, email)
+        executeSQL('insert into teachers (temail) values("%s")', True, email)
      if onepass is not None:
-         p = executeSQL('select tid from teachers where temail=%s and tpin=%s', True, email, onepass)
+         p = executeSQL('select tid from teachers where temail="%s" and tpin="%s"', True, email, onepass)
          if p != "Failure":
              return Response(response='Success', status=200)
          return Response(response='Failed', status=401)
@@ -41,7 +41,7 @@ def tlogin():
              msg = Message(subject="Single use pin for NIT Andhra Pradesh CTS login",
              sender=cts.config.get("MAIL_USERNAME"),
              recipients=[email],
-             body='Single use pin: %s \n \n \n This is an auto generated mail. \n Please do not reply to this message or on this email address. \n For any query, please contact at 411843@student.nitandhra.ac.in \n Do not disclose any confidential information to anyone.' % key)
+             body='Single use pin: "%s" \n \n \n This is an auto generated mail. \n Please do not reply to this message or on this email address. \n For any query, please contact at 411843@student.nitandhra.ac.in \n Do not disclose any confidential information to anyone.' % key)
          mail.send(msg)
          executeSQL('update teachers set tpin="%s" where temail="%s"', True, key, email)
          return Response(response='Success', status=200)
@@ -59,11 +59,11 @@ def slogin():
      domain = email[pos:]
      if domain != "@student.nitandhra.ac.in":
         return Response(response='Failed', status=401)
-     sd = executeSQL('select sid from students where Semail=%s', True, email)
+     sd = executeSQL('select sid from students where Semail="%s"', True, email)
      if sd == "Failure":
-        executeSQL('insert into students (Semail) values(%s)', True, email)
+        executeSQL('insert into students (Semail) values("%s")', True, email)
      if onepass is not None:
-         p = executeSQL('select sid from students where Semail=%s and spin=%s', True, email, onepass)
+         p = executeSQL('select sid from students where Semail="%s" and spin="%s"', True, email, onepass)
          if p != "Failure":
              return Response(response='Success', status=200)
          return Response(response='Failed', status=401)
@@ -73,7 +73,7 @@ def slogin():
              msg = Message(subject="Single use pin for NIT Andhra Pradesh CTS login",
              sender=cts.config.get("MAIL_USERNAME"),
              recipients=[email],
-             body='Single use pin: %s \n \n \n This is an auto generated mail. \n Please do not reply to this message or on this email address. \n For any query, please contact at 411843@student.nitandhra.ac.in \n Do not disclose any confidential information to anyone.' % key)
+             body='Single use pin: "%s" \n \n \n This is an auto generated mail. \n Please do not reply to this message or on this email address. \n For any query, please contact at 411843@student.nitandhra.ac.in \n Do not disclose any confidential information to anyone.' % key)
          mail.send(msg)
          executeSQL('update students set spin="%s" where Semail="%s"', True, key, email)
          return Response(response='Success', status=200)
@@ -92,18 +92,18 @@ def signup():
      if domain != "@student.nitandhra.ac.in" or domain != "@nitandhra.ac.in":
         return Response(response='Failed', status=401)
      if domain == "@student.nitandhra.ac.in":
-        i = executeSQL('select sid from students where Semail=%s', True, email)
+        i = executeSQL('select sid from students where Semail="%s"', True, email)
      else:
-        i = executeSQL('select tid from teachers where temail=%s', True, email)
+        i = executeSQL('select tid from teachers where temail="%s"', True, email)
      if domain == "@student.nitandhra.ac.in" and None not in i:
-         executeSQL('insert into students (Semail) values(%s)', True, email)
+         executeSQL('insert into students (Semail) values("%s")', True, email)
      elif domain == "@nitandhra.ac.in" and None not in i:
-         executeSQL('insert into teachers (temail) values(%s)', True, email)
+         executeSQL('insert into teachers (temail) values("%s")', True, email)
      if onepass != "":
          if domain == "@student.nitandhra.ac.in":
-             p = executeSQL('select spin from students where Semail=%s', True, email)
+             p = executeSQL('select spin from students where Semail="%s"', True, email)
          else:
-             p = executeSQL('select tpin from teachers where temail=%s', True, email)
+             p = executeSQL('select tpin from teachers where temail="%s"', True, email)
          if p[0] == onepass:
              return Response(response='Success', status=200)
          return Response(response='Failed', status=401)
@@ -113,7 +113,7 @@ def signup():
              msg = Message(subject="Single use pin for NIT Andhra Pradesh CTS login",
              sender=cts.config.get("MAIL_USERNAME"),
              recipients=[email],
-             body='Single use pin: %s \n \n \n This is an auto generated mail. \n Please do not reply to this message or on this email address. \n For any query, please contact at 411843@student.nitandhra.ac.in \n Do not disclose any confidential information to anyone.' % key)
+             body='Single use pin: "%s" \n \n \n This is an auto generated mail. \n Please do not reply to this message or on this email address. \n For any query, please contact at 411843@student.nitandhra.ac.in \n Do not disclose any confidential information to anyone.' % key)
          mail.send(msg)
          if domain == "@student.nitandhra.ac.in":
              executeSQL('update students set spin="%s" where Semail="%s"', True, key, email)
@@ -127,7 +127,7 @@ def rlogin():
      email = request.args.get('email')
      onepass = request.args.get('pin')
      if onepass is not None:
-         p = executeSQL('select rid from resolvers where remail=%s and rpin=%s', True, email, onepass)
+         p = executeSQL('select rid from resolvers where remail="%s" and rpin="%s"', True, email, onepass)
          if p != "Failure":
              return Response(response='Success', status=200)
          return Response(response='Failed', status=401)
@@ -137,7 +137,7 @@ def rlogin():
              msg = Message(subject="Single use resolver's pin for NIT Andhra Pradesh CTS login",
              sender=cts.config.get("MAIL_USERNAME"),
              recipients=[email],
-             body='Single use pin: %s \n \n \n This is an auto generated mail. \n Please do not reply to this message or on this email address. \n For any query, please contact at 411843@student.nitandhra.ac.in \n Do not disclose any confidential information to anyone.' % key)
+             body='Single use pin: "%s" \n \n \n This is an auto generated mail. \n Please do not reply to this message or on this email address. \n For any query, please contact at 411843@student.nitandhra.ac.in \n Do not disclose any confidential information to anyone.' % key)
          mail.send(msg)
          executeSQL('update resolvers set rpin="%s" where remail="%s"', True, key, email)
          return Response(response='Success', status=200)
@@ -149,12 +149,12 @@ def tfiles(token):
      data = request.headers['data']
      tags = request.headers['tags']
      if None not in vdata:
-         cid = executeSQL('select cid from complaints where cdata=%s and tags=%s', True, data, tags)
+         cid = executeSQL('select cid from complaints where cdata="%s" and tags="%s"', True, data, tags)
          if None not in cid:
-            executeSQL('insert into complaints(cdata,tags) values (%s,%s)', True, data, tags)
-            cid = executeSQL('select cid from complaints where cdata=%s and tags=%s', True, data, tags)
+            executeSQL('insert into complaints(cdata,tags) values ("%s","%s")', True, data, tags)
+            cid = executeSQL('select cid from complaints where cdata="%s" and tags="%s"', True, data, tags)
             time_now = present_date()
-            executeSQL('insert into tfiles(tid,cid,ftime) values (%s,%s, %s)', True, vdata[0], cid, time_now)
+            executeSQL('insert into tfiles(tid,cid,ftime) values (%d,%d, "%s")', True, vdata[0], cid, time_now)
          return Response(response='Success', status=200)
      else:
          return Response(response='Failed', status=401)
@@ -166,12 +166,12 @@ def sfiles(token):
      data = request.headers['data']
      tags = request.headers['tags']
      if None not in vdata:
-         cid = executeSQL('select cid from complaints where cdata=%s and tags=%s', True, data, tags)
+         cid = executeSQL('select cid from complaints where cdata="%s" and tags="%s"', True, data, tags)
          if None not in cid:
-            executeSQL('insert into complaints(cdata,tags) values (%s,%s)', True, data, tags)
-            cid = executeSQL('select cid from complaints where cdata=%s and tags=%s', True, data, tags)
+            executeSQL('insert into complaints(cdata,tags) values ("%s","%s")', True, data, tags)
+            cid = executeSQL('select cid from complaints where cdata=%s and tags="%s"', True, data, tags)
             time_now = present_date()
-            executeSQL('insert into sfiles(sid,cid,ftime) values (%s,%s, %s)', True, vdata[0], cid, time_now)
+            executeSQL('insert into sfiles(sid,cid,ftime) values (%d,%d, "%s")', True, vdata[0], cid, time_now)
          return Response(response='Success', status=200)
      else:
          return Response(response='Failed', status=401)
@@ -182,7 +182,7 @@ def sfiles(token):
 def myscomplaints(token):
      vdata = svalidate(token)
      if None not in vdata:
-         data = executeSQL('select * from students,complaints, sfiles where students.sid=sfiles.sid and sfiles.cid=complaints.cid and students.sid = %s', False, vdata[0])
+         data = executeSQL('select * from students,complaints, sfiles where students.sid=sfiles.sid and sfiles.cid=complaints.cid and students.sid = %d', False, vdata[0])
          return Response(response=data, status=200)
      else:
          return Response(response='Failed', status=401)
@@ -193,7 +193,7 @@ def myscomplaints(token):
 def mytcomplaints(token):
      vdata = tvalidate(token)
      if None not in vdata:
-         data = executeSQL('select * from teachers,complaints, tfiles where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid and teachers.tid = %s', False, vdata[0])
+         data = executeSQL('select * from teachers,complaints, tfiles where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid and teachers.tid = %d', False, vdata[0])
          return Response(response=data, status=200)
      else:
          return Response(response='Failed', status=401)
@@ -204,7 +204,7 @@ def mytcomplaints(token):
 def mytcomplaintsr(token):
      vdata = tvalidate(token)
      if None not in vdata:
-         data = executeSQL('select * from teachers,complaints, tfiles, resolves, resolvers where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid and resolves.cid = complaints.cid and resolves.rid = resolvers.rid and teachers.tid = %s', False, vdata[0])
+         data = executeSQL('select * from teachers,complaints, tfiles, resolves, resolvers where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid and resolves.cid = complaints.cid and resolves.rid = resolvers.rid and teachers.tid = %d', False, vdata[0])
          return Response(response=data, status=200)
      else:
          return Response(response='Failed', status=401)
@@ -215,7 +215,7 @@ def mytcomplaintsr(token):
 def myscomplaintsr(token):
      vdata = svalidate(token)
      if None not in vdata:
-         data = executeSQL('select * from students,complaints, sfiles, resolves, resolvers where students.sid=sfiles.sid and sfiles.cid=complaints.cid and resolves.cid = complaints.cid and resolves.rid = resolvers.rid and students.sid = %s', False, vdata[0])
+         data = executeSQL('select * from students,complaints, sfiles, resolves, resolvers where students.sid=sfiles.sid and sfiles.cid=complaints.cid and resolves.cid = complaints.cid and resolves.rid = resolvers.rid and students.sid = %d', False, vdata[0])
          return Response(response=data, status=200)
      else:
          return Response(response='Failed', status=401)
@@ -250,7 +250,7 @@ def complaints(cid, token):
      is_resolved = request.headers['is_resolved'] # 0/1
      is_valid = request.headers['is_valid'] # 0/1
      if None not in vdata:
-         data = executeSQL('insert into resolves values(%d, %d, %d, %d,%s)', False, vdata[0], cid,is_valid, is_resolved, exp)
+         data = executeSQL('insert into resolves values(%d, %d, %d, %d,"%s")', False, vdata[0], cid,is_valid, is_resolved, exp)
          return Response(response=data, status=200)
      else:
          return Response(response='Failed', status=401)
