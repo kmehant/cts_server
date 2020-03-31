@@ -1,8 +1,11 @@
 import os
 
 print (os.environ['PASS'])
+print (os.environ['DBPASS'])
 
 mail_pass = os.environ['PASS']
+db_pass = os.environ['DBPASS']
+
 mail_settings = {
     "MAIL_SERVER": 'smtp.gmail.com',
     "MAIL_PORT": 465,
@@ -16,7 +19,7 @@ mail_settings = {
 
 MYSQL_HOST='remotemysql.com'
 MYSQL_USER='tFkLeQmDdy'
-MYSQL_PASSWORD='Ng3u9avM2J'
+MYSQL_PASSWORD=db_pass
 MYSQL_DB='tFkLeQmDdy'
 
 config={'CACHE_TYPE': 'simple'}
