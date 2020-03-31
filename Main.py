@@ -51,6 +51,8 @@ def tlogin():
 def slogin():
      email = request.args.get('email')
      onepass = request.args.get('pin')
+     print("email: " + email)
+     print("onepass" + onepass)
      try: 
         pos = email.index('@') 
      except ValueError as e: 
