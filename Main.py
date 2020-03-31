@@ -25,7 +25,7 @@ def tlogin():
         pass
      domain = email[pos:]
      print(domain)
-     if domain != "nitandhra.ac.in":
+     if domain != "@nitandhra.ac.in":
         return Response(response='Failed', status=401)
      sd = executeSQL('select tid from teachers where temail=%s', True, email)
      if None in sd:
@@ -58,7 +58,7 @@ def slogin():
         pass
      domain = email[pos:]
      print(domain)
-     if domain != "student.nitandhra.ac.in":
+     if domain != "@student.nitandhra.ac.in":
         return Response(response='Failed', status=401)
      sd = executeSQL('select sid from students where Semail=%s', True, email)
      if None in sd:
@@ -90,18 +90,18 @@ def signup():
         return Response(response='Invalid', status=401)
         pass
      domain = email[pos:]
-     if domain != "student.nitandhra.ac.in" or domain != "nitandhra.ac.in":
+     if domain != "@student.nitandhra.ac.in" or domain != "@nitandhra.ac.in":
         return Response(response='Failed', status=401)
-     if domain == "student.nitandhra.ac.in":
+     if domain == "@student.nitandhra.ac.in":
         i = executeSQL('select sid from students where Semail=%s', True, email)
      else:
         i = executeSQL('select tid from teachers where temail=%s', True, email)
-     if domain == "student.nitandhra.ac.in" and None not in i:
+     if domain == "@student.nitandhra.ac.in" and None not in i:
          executeSQL('insert into students (Semail) values(%s)', True, email)
-     elif domain == "nitandhra.ac.in" and None not in i:
+     elif domain == "@nitandhra.ac.in" and None not in i:
          executeSQL('insert into teachers (temail) values(%s)', True, email)
      if onepass != "":
-         if domain == "student.nitandhra.ac.in":
+         if domain == "@student.nitandhra.ac.in":
              p = executeSQL('select spin from students where Semail=%s', True, email)
          else:
              p = executeSQL('select tpin from teachers where temail=%s', True, email)
@@ -116,7 +116,7 @@ def signup():
              recipients=[email],
              body='Single use pin: %s \n \n \n This is an auto generated mail. \n Please do not reply to this message or on this email address. \n For any query, please contact at 411843@student.nitandhra.ac.in \n Do not disclose any confidential information to anyone.' % key)
          mail.send(msg)
-         if domain == "student.nitandhra.ac.in":
+         if domain == "@student.nitandhra.ac.in":
              executeSQL('update students set spin="%s" where Semail="%s"', True, key, email)
          else:
              executeSQL('update teachers set tpin="%s" where temail="%s"', True, key, email)
