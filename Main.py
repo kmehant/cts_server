@@ -60,6 +60,7 @@ def slogin():
      if domain != "@student.nitandhra.ac.in":
         return Response(response='Failed', status=401)
      sd = executeSQL('select sid from students where Semail="%s"', True, email)
+     print(sd)
      if sd == "Failure":
         executeSQL('insert into students (Semail) values("%s")', True, email)
      if onepass is not None:

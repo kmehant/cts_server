@@ -28,10 +28,11 @@ def executeSQL(sqlQuery, fetchOne=True, *params):
 
     cur = mysql.connection.cursor()
     try:
-        print(sqlQuery%params)
+        print("db:" + sqlQuery%params)
         cur.execute(sqlQuery % params)
         mysql.connection.commit()
     except Exception as e:
+        print("db: " + e)
         mysql.connection.rollback()
         return "Failure"
 
@@ -41,11 +42,11 @@ def executeSQL(sqlQuery, fetchOne=True, *params):
             result=list(cur.fetchone())
         else:
             result=list(cur.fetchall())
+        return result
     except:
         pass
     finally:
         cur.close()
-        return result
 
 
 def svalidate(token):
