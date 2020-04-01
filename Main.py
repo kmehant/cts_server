@@ -199,7 +199,7 @@ def mytcomplaints(token):
      vdata = tvalidate(token)
      if vdata is not None:
          data = executeSQL('select * from teachers,complaints, tfiles where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid and teachers.tid = %d', False, vdata[0])
-         return Response(response=data, status=200)
+         return Response(response=json.dumps(data, indent=4, sort_keys=True, default=str), status=200)
      else:
          return Response(response='Failed', status=401)
 
@@ -210,7 +210,7 @@ def mytcomplaintsr(token):
      vdata = tvalidate(token)
      if vdata is not None:
          data = executeSQL('select * from teachers,complaints, tfiles, resolves, resolvers where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid and resolves.cid = complaints.cid and resolves.rid = resolvers.rid and teachers.tid = %d', False, vdata[0])
-         return Response(response=data, status=200)
+         return Response(response=json.dumps(data, indent=4, sort_keys=True, default=str), status=200)
      else:
          return Response(response='Failed', status=401)
 
@@ -221,7 +221,7 @@ def myscomplaintsr(token):
      vdata = svalidate(token)
      if vdata is not None:
          data = executeSQL('select * from students,complaints, sfiles, resolves, resolvers where students.sid=sfiles.sid and sfiles.cid=complaints.cid and resolves.cid = complaints.cid and resolves.rid = resolvers.rid and students.sid = %d', False, vdata[0])
-         return Response(response=data, status=200)
+         return Response(response=json.dumps(data, indent=4, sort_keys=True, default=str), status=200)
      else:
          return Response(response='Failed', status=401)
 
@@ -232,7 +232,7 @@ def scomplaints(token):
      vdata = rvalidate(token)
      if vdata is not None:
          data = executeSQL('select * from students,complaints, sfiles where students.sid=sfiles.sid and sfiles.cid=complaints.cid ', False)
-         return Response(response=data, status=200)
+         return Response(response=json.dumps(data, indent=4, sort_keys=True, default=str), status=200)
      else:
          return Response(response='Failed', status=401)
 
@@ -243,7 +243,7 @@ def tcomplaints(token):
      vdata = rvalidate(token)
      if vdata is not None:
          data = executeSQL('select * from teachers,complaints, tfiles where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid ', False)
-         return Response(response=data, status=200)
+         return Response(response=json.dumps(data, indent=4, sort_keys=True, default=str), status=200)
      else:
          return Response(response='Failed', status=401)
 
@@ -256,7 +256,7 @@ def complaints(cid, token):
      is_valid = request.headers['is_valid'] # 0/1
      if vdata is not None:
          data = executeSQL('insert into resolves values(%d, %d, %d, %d,"%s")', False, vdata[0], cid,is_valid, is_resolved, exp)
-         return Response(response=data, status=200)
+         return Response(response=json.dumps(data, indent=4, sort_keys=True, default=str), status=200)
      else:
          return Response(response='Failed', status=401)
 
