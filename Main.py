@@ -149,7 +149,7 @@ def tfiles(token):
      vdata = tvalidate(token)
      data = request.headers['data']
      tags = request.headers['tags']
-     if len(vdata) != 0:
+     if vdata is not None:
          cid = executeSQL('select cid from complaints where cdata="%s" and tags="%s"', True, data, tags)
          if None not in cid:
             executeSQL('insert into complaints(cdata,tags) values ("%s","%s")', True, data, tags)
@@ -166,7 +166,7 @@ def sfiles(token):
      vdata = svalidate(token)
      data = request.headers['data']
      tags = request.headers['tags']
-     if len(vdata) != 0:
+     if vdata is not None:
          cid = executeSQL('select cid from complaints where cdata="%s" and tags="%s"', True, data, tags)
          if None not in cid:
             executeSQL('insert into complaints(cdata,tags) values ("%s","%s")', True, data, tags)
@@ -182,7 +182,7 @@ def sfiles(token):
 @cache.cached(timeout=100)
 def myscomplaints(token):
      vdata = svalidate(token)
-     if len(vdata) != 0:
+     if vdata is not None:
          data = executeSQL('select * from students,complaints, sfiles where students.sid=sfiles.sid and sfiles.cid=complaints.cid and students.sid = %d', False, vdata[0])
          return Response(response=data, status=200)
      else:
@@ -193,7 +193,7 @@ def myscomplaints(token):
 @cache.cached(timeout=100)
 def mytcomplaints(token):
      vdata = tvalidate(token)
-     if len(vdata) != 0:
+     if vdata is not None:
          data = executeSQL('select * from teachers,complaints, tfiles where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid and teachers.tid = %d', False, vdata[0])
          return Response(response=data, status=200)
      else:
@@ -204,7 +204,7 @@ def mytcomplaints(token):
 @cache.cached(timeout=100)
 def mytcomplaintsr(token):
      vdata = tvalidate(token)
-     if len(vdata) != 0:
+     if vdata is not None:
          data = executeSQL('select * from teachers,complaints, tfiles, resolves, resolvers where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid and resolves.cid = complaints.cid and resolves.rid = resolvers.rid and teachers.tid = %d', False, vdata[0])
          return Response(response=data, status=200)
      else:
@@ -215,7 +215,7 @@ def mytcomplaintsr(token):
 @cache.cached(timeout=100)
 def myscomplaintsr(token):
      vdata = svalidate(token)
-     if len(vdata) != 0:
+     if vdata is not None:
          data = executeSQL('select * from students,complaints, sfiles, resolves, resolvers where students.sid=sfiles.sid and sfiles.cid=complaints.cid and resolves.cid = complaints.cid and resolves.rid = resolvers.rid and students.sid = %d', False, vdata[0])
          return Response(response=data, status=200)
      else:
@@ -226,7 +226,7 @@ def myscomplaintsr(token):
 @cache.cached(timeout=100)
 def scomplaints(token):
      vdata = rvalidate(token)
-     if len(vdata) != 0:
+     if vdata is not None:
          data = executeSQL('select * from students,complaints, sfiles where students.sid=sfiles.sid and sfiles.cid=complaints.cid ', False)
          return Response(response=data, status=200)
      else:
@@ -237,7 +237,7 @@ def scomplaints(token):
 @cache.cached(timeout=100)
 def tcomplaints(token):
      vdata = rvalidate(token)
-     if len(vdata) != 0:
+     if vdata is not None:
          data = executeSQL('select * from teachers,complaints, tfiles where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid ', False)
          return Response(response=data, status=200)
      else:
@@ -250,7 +250,7 @@ def complaints(cid, token):
      exp = request.headers['exp']
      is_resolved = request.headers['is_resolved'] # 0/1
      is_valid = request.headers['is_valid'] # 0/1
-     if len(vdata) != 0:
+     if vdata is not None:
          data = executeSQL('insert into resolves values(%d, %d, %d, %d,"%s")', False, vdata[0], cid,is_valid, is_resolved, exp)
          return Response(response=data, status=200)
      else:
