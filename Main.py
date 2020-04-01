@@ -172,10 +172,9 @@ def sfiles(token):
             executeSQL('insert into complaints(cdata,tags) values ("%s","%s")', True, data, tags)
             cid = executeSQL('select cid from complaints where cdata="%s" and tags="%s"', True, data, tags)
             time_now = present_date()
-            print("present_date()" + present_date())
-            print("vdata[0]:" + vdata[0])
-            print("cid[0]" + cid[0])
-
+            print( present_date())
+            print(vdata[0])
+            print(cid[0])
             executeSQL('insert into sfiles(sid,cid,ftime) values (%s,%s, "%s")', True, vdata[0], cid[0], time_now)
          return Response(response='Success', status=200)
      else:
