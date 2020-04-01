@@ -151,7 +151,7 @@ def tfiles(token):
      tags = request.headers['tags']
      if vdata is not None:
          cid = executeSQL('select cid from complaints where cdata="%s" and tags="%s"', True, data, tags)
-         if cid is not None:
+         if cid is None:
             executeSQL('insert into complaints(cdata,tags) values ("%s","%s")', True, data, tags)
             cid = executeSQL('select cid from complaints where cdata="%s" and tags="%s"', True, data, tags)
             time_now = present_date()
@@ -168,7 +168,7 @@ def sfiles(token):
      tags = request.headers['tags']
      if vdata is not None:
          cid = executeSQL('select cid from complaints where cdata="%s" and tags="%s"', True, data, tags)
-         if cid is not None:
+         if cid is None:
             executeSQL('insert into complaints(cdata,tags) values ("%s","%s")', True, data, tags)
             cid = executeSQL('select cid from complaints where cdata=%s and tags="%s"', True, data, tags)
             time_now = present_date()
