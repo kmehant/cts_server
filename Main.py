@@ -28,11 +28,11 @@ def tlogin():
      if domain != "@nitandhra.ac.in":
         return Response(response='Failed', status=401)
      sd = executeSQL('select tid from teachers where temail="%s"', True, email)
-     if sd == "Failure":
+     if sd is None:
         executeSQL('insert into teachers (temail) values("%s")', True, email)
      if onepass is not None:
          p = executeSQL('select tid from teachers where temail="%s" and tpin="%s"', True, email, onepass)
-         if p != "Failure":
+         if p is not None:
              return Response(response='Success', status=200)
          return Response(response='Failed', status=401)
      else:
@@ -61,11 +61,11 @@ def slogin():
         return Response(response='Failed', status=401)
      sd = executeSQL('select sid from students where Semail="%s"', True, email)
      print(sd)
-     if sd == "Failure":
+     if sd is None:
         executeSQL('insert into students (Semail) values("%s")', True, email)
      if onepass is not None:
          p = executeSQL('select sid from students where Semail="%s" and spin="%s"', True, email, onepass)
-         if p != "Failure":
+         if p is not None:
              return Response(response='Success', status=200)
          return Response(response='Failed', status=401)
      else:
@@ -129,7 +129,7 @@ def rlogin():
      onepass = request.args.get('pin')
      if onepass is not None:
          p = executeSQL('select rid from resolvers where remail="%s" and rpin="%s"', True, email, onepass)
-         if p != "Failure":
+         if p is not None:
              return Response(response='Success', status=200)
          return Response(response='Failed', status=401)
      else:
