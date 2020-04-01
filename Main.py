@@ -172,7 +172,7 @@ def sfiles(token):
             executeSQL('insert into complaints(cdata,tags) values ("%s","%s")', True, data, tags)
             cid = executeSQL('select cid from complaints where cdata="%s" and tags="%s"', True, data, tags)
             time_now = present_date()
-            print( present_date())
+            print(present_date())
             print(vdata[0])
             print(cid[0])
             executeSQL('insert into sfiles(sid,cid,ftime) values (%s,%s, "%s")', True, vdata[0], cid[0], time_now)
@@ -187,11 +187,12 @@ def myscomplaints(token):
      vdata = svalidate(token)
      if vdata is not None:
          data = executeSQL('select * from students,complaints, sfiles where students.sid=sfiles.sid and sfiles.cid=complaints.cid and students.sid = %d', False, vdata[0])
-         return Response(response=data, status=200)
+         print(data)
+         return Response(response=jsonify(data), status=200)
      else:
          return Response(response='Failed', status=401)
 
-
+ 
 @cts.route('/mytcomplaints/<token>')
 @cache.cached(timeout=100)
 def mytcomplaints(token):
