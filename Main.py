@@ -96,9 +96,9 @@ def signup():
         i = executeSQL('select sid from students where Semail="%s"', True, email)
      else:
         i = executeSQL('select tid from teachers where temail="%s"', True, email)
-     if domain == "@student.nitandhra.ac.in" and None not in i:
+     if domain == "@student.nitandhra.ac.in" and i is not None:
          executeSQL('insert into students (Semail) values("%s")', True, email)
-     elif domain == "@nitandhra.ac.in" and None not in i:
+     elif domain == "@nitandhra.ac.in" and i is not None:
          executeSQL('insert into teachers (temail) values("%s")', True, email)
      if onepass != "":
          if domain == "@student.nitandhra.ac.in":
@@ -151,7 +151,7 @@ def tfiles(token):
      tags = request.headers['tags']
      if vdata is not None:
          cid = executeSQL('select cid from complaints where cdata="%s" and tags="%s"', True, data, tags)
-         if None not in cid:
+         if cid is not None:
             executeSQL('insert into complaints(cdata,tags) values ("%s","%s")', True, data, tags)
             cid = executeSQL('select cid from complaints where cdata="%s" and tags="%s"', True, data, tags)
             time_now = present_date()
@@ -168,7 +168,7 @@ def sfiles(token):
      tags = request.headers['tags']
      if vdata is not None:
          cid = executeSQL('select cid from complaints where cdata="%s" and tags="%s"', True, data, tags)
-         if None not in cid:
+         if cid is not None:
             executeSQL('insert into complaints(cdata,tags) values ("%s","%s")', True, data, tags)
             cid = executeSQL('select cid from complaints where cdata=%s and tags="%s"', True, data, tags)
             time_now = present_date()
