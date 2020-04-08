@@ -227,7 +227,6 @@ def myscomplaintsr(token):
 
 
 @cts.route('/scomplaints/<token>')
-@cache.cached(timeout=100)
 def scomplaints(token):
      vdata = rvalidate(token)
      if vdata is not None:
@@ -238,11 +237,10 @@ def scomplaints(token):
 
 
 @cts.route('/tcomplaints/<token>')
-@cache.cached(timeout=100)
 def tcomplaints(token):
      vdata = rvalidate(token)
      if vdata is not None:
-         data = executeSQL('select * from teachers,complaints, tfiles where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid ', False)
+         data = executeSQL('select * from teachers,complaints, tfiles where teachers.tid=tfiles.tid and tfiles.cid=complaints.cid and tfiles.cid not in (select cid from resolves)', False)
          return Response(response=json.dumps(data, indent=4, sort_keys=True, default=str), status=200)
      else:
          return Response(response='Failed', status=401)
