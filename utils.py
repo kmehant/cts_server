@@ -32,9 +32,11 @@ def executeSQL(sqlQuery, fetchOne=True, *params):
         cur.execute(sqlQuery % params)
         mysql.connection.commit()
     except Exception as e:
+        ex = e
         print("db: failed")
         traceback_str = ''.join(traceback.format_tb(e.__traceback__))
         print(traceback_str)
+        print(ex)
         mysql.connection.rollback()
         return "Failure"
 
