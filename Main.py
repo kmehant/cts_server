@@ -231,7 +231,7 @@ def myscomplaintsr(token):
 def scomplaints(token):
      vdata = rvalidate(token)
      if vdata is not None:
-         data = executeSQL('select * from students,complaints, sfiles where students.sid=sfiles.sid and sfiles.cid=complaints.cid ', False)
+         data = executeSQL('select * from students,complaints, sfiles where students.sid=sfiles.sid and sfiles.cid=complaints.cid and sfiles.cid not in (select cid from resolves)', False)
          return Response(response=json.dumps(data, indent=4, sort_keys=True, default=str), status=200)
      else:
          return Response(response='Failed', status=401)
