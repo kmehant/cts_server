@@ -1,5 +1,6 @@
 
 from flask import Flask
+
 from flask_mysqldb import MySQL
 from constants import mail_settings, MYSQL_HOST, MYSQL_PASSWORD, \
     MYSQL_USER, MYSQL_DB, config

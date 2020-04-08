@@ -255,8 +255,8 @@ def complaints(cid, token):
      is_resolved = request.headers['is_resolved'] # 0/1
      is_valid = request.headers['is_valid'] # 0/1
      if vdata is not None:
-         data = executeSQL('insert into resolves values(%d, %d, %d, %d,"%s")', False, vdata[0], cid,is_valid, is_resolved, exp)
-         return Response(response=json.dumps(data, indent=4, sort_keys=True, default=str), status=200)
+         executeSQL('insert into resolves values(%d, %d, %d, %d,"%s")', False, vdata[0], cid,is_valid, is_resolved, exp)
+         return Response(response=json.dumps("success", indent=4, sort_keys=True, default=str), status=200)
      else:
          return Response(response='Failed', status=401)
 

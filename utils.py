@@ -3,7 +3,7 @@ from flask import Flask
 from datetime import date
 from initializer import mysql
 import json
-
+import traceback
 
 
 def present_date():
@@ -33,6 +33,8 @@ def executeSQL(sqlQuery, fetchOne=True, *params):
         mysql.connection.commit()
     except Exception as e:
         print("db: failed")
+        traceback_str = ''.join(traceback.format_tb(e.__traceback__))
+        print(traceback_str)
         mysql.connection.rollback()
         return "Failure"
 
