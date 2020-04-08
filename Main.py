@@ -182,7 +182,7 @@ def sfiles(token):
 
 
 @cts.route('/myscomplaints/<token>')
-@cache.cached(timeout=100)
+@cache.cached(timeout=15)
 def myscomplaints(token):
      vdata = svalidate(token)
      if vdata is not None:
@@ -194,7 +194,7 @@ def myscomplaints(token):
 
  
 @cts.route('/mytcomplaints/<token>')
-@cache.cached(timeout=100)
+@cache.cached(timeout=15)
 def mytcomplaints(token):
      vdata = tvalidate(token)
      if vdata is not None:
@@ -205,7 +205,7 @@ def mytcomplaints(token):
 
 
 @cts.route('/mytcomplaints/r/<token>')
-@cache.cached(timeout=100)
+@cache.cached(timeout=15)
 def mytcomplaintsr(token):
      vdata = tvalidate(token)
      if vdata is not None:
@@ -216,7 +216,7 @@ def mytcomplaintsr(token):
 
 
 @cts.route('/myscomplaints/r/<token>')
-@cache.cached(timeout=100)
+@cache.cached(timeout=15)
 def myscomplaintsr(token):
      vdata = svalidate(token)
      if vdata is not None:
