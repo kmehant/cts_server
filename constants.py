@@ -9,8 +9,8 @@ mail_settings = {
     "MAIL_PORT": 465,
     "MAIL_USE_TLS": False,
     "MAIL_USE_SSL": True,
-    "MAIL_USERNAME": "paspmailservice@gmail.com",
-    "MAIL_PASSWORD": "pasp_service@darkshadows"
+    "MAIL_USERNAME": "ctsnitap@gmail.com",
+    "MAIL_PASSWORD": "qwvcradmpbondhlf"
 }
 
 # production hosting values are given below
