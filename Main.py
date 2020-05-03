@@ -260,8 +260,9 @@ def complaints(cid, token):
          return Response(response='Failed', status=401)
 
 
-@cts.route('/search')
-def search():
+@cts.route('/search/<cardinal>')
+def search(cardinal):
+     cardinal = int(cardinal)
      data = str(request.headers['data'])
      search_term = request.headers['search_term']
      #search_term+="*"
@@ -273,7 +274,7 @@ def search():
      count = 0
      data = data.split(',')
      for a in data:
-         if count == 10:
+         if count == cardinal:
              count = 0
              ans.append(tempArray)
              tempArray = []
