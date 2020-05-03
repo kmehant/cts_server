@@ -264,7 +264,7 @@ def complaints(cid, token):
 def search():
      data = str(request.headers['data'])
      search_term = request.headers['search_term']
-     search_term+="*"
+     #search_term+="*"
      print(data)
      ans = []
      ans2 = []
@@ -279,7 +279,9 @@ def search():
              tempArray = []
          count = count + 1
          tempArray.append(a)
- 
+
+     ans.append(tempArray)
+     print(ans)
      for i in ans:
          addIT = False
          for j in i:
@@ -288,6 +290,7 @@ def search():
                 break
          if addIt is True:
             ans2.append(i)
+
      print(ans2)
      return Response(response=json.dumps(ans2, indent=4, sort_keys=True, default=str), status=200)
 
