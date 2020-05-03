@@ -262,7 +262,7 @@ def complaints(cid, token):
 
 @cts.route('/search')
 def search():
-     data = list(request.headers['data'])
+     data = request.headers['data']
      search_term = request.headers['search_term']
      search_term+="*"
      print(data)
