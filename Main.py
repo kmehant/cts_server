@@ -277,7 +277,7 @@ def search():
              count = 0
              ans.append(tempArray)
              tempArray = []
-         count++
+         count = count + 1
          tempArray.append(a)
 
         
