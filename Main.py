@@ -267,17 +267,31 @@ def search():
      search_term+="*"
      print(data)
      ans = []
+     ans2 = []
      addIt = False
-     for i in data:
+     tempArray = []
+     count = 0
+     data = data.split(',')
+     for a in data:
+         if count == 9:
+             count = 0
+             ans.append(tempArray)
+             tempArray = []
+         count++
+         tempArray.append(a)
+
+        
+         
+     for i in ans:
          addIT = False
          for j in i:
              if re.search(search_term, data):
                 addIt = True
                 break
          if addIt is True:
-            ans.append(i)
-     print(ans)
-     return Response(response=json.dumps(ans, indent=4, sort_keys=True, default=str), status=200)
+            ans2.append(i)
+     print(ans2)
+     return Response(response=json.dumps(ans2, indent=4, sort_keys=True, default=str), status=200)
 
 
 
