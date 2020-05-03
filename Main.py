@@ -5,6 +5,7 @@ from flask_mail import Message
 from utils import otp, present_date, executeSQL, rvalidate, svalidate, tvalidate
 from initializer import cts, mail, cache
 
+import re
 
 
 
@@ -257,6 +258,27 @@ def complaints(cid, token):
          return Response(response=json.dumps("success", indent=4, sort_keys=True, default=str), status=200)
      else:
          return Response(response='Failed', status=401)
+
+
+@cts.route('/search')
+def search():
+     data = request.headers['data']
+     search_term = request.headers['search_term']
+     search_term+="*"
+     print(data)
+     ans = []
+     addIt = False
+     for i in data:
+         addIT = False
+         for j in i:
+             if re.search(search_term, data):
+                addIt = True
+                break
+         if addIt is True:
+            ans.append(i)
+
+     return Response(response=json.dumps(ans, indent=4, sort_keys=True, default=str), status=200)
+
 
 
 if __name__ == '__main__':
