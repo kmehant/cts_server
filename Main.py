@@ -262,7 +262,7 @@ def complaints(cid, token):
 
 @cts.route('/search')
 def search():
-     data = request.headers['data']
+     data = str(request.headers['data'])
      search_term = request.headers['search_term']
      search_term+="*"
      print(data)
@@ -279,9 +279,7 @@ def search():
              tempArray = []
          count = count + 1
          tempArray.append(a)
-
-        
-         
+ 
      for i in ans:
          addIT = False
          for j in i:
