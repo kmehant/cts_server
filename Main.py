@@ -262,7 +262,7 @@ def complaints(cid, token):
 
 @cts.route('/search')
 def search():
-     data = request.headers['data']
+     data = list(request.headers['data'])
      search_term = request.headers['search_term']
      search_term+="*"
      print(data)
@@ -276,7 +276,7 @@ def search():
                 break
          if addIt is True:
             ans.append(i)
-
+     print(ans)
      return Response(response=json.dumps(ans, indent=4, sort_keys=True, default=str), status=200)
 
 
