@@ -283,7 +283,7 @@ def search():
      for i in ans:
          addIT = False
          for j in i:
-             if re.search(search_term, data):
+             if re.search(search_term, j):
                 addIt = True
                 break
          if addIt is True:
