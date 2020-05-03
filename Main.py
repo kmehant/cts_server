@@ -273,7 +273,7 @@ def search():
      count = 0
      data = data.split(',')
      for a in data:
-         if count == 9:
+         if count == 10:
              count = 0
              ans.append(tempArray)
              tempArray = []
